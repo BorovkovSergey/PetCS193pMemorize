@@ -20,6 +20,7 @@ struct MemorizeView: View {
 
 struct CardView: View {
     var card: Memorize<String>.Card
+    
     var body: some View {
         GeometryReader(){ geometry in
             self.body(for: geometry.size)
@@ -28,13 +29,20 @@ struct CardView: View {
     
     func body(for size: CGSize) -> some View{
         ZStack(){
-            RoundedRectangle(cornerRadius: 25.0)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color.white)
-            RoundedRectangle(cornerRadius: 25.0)
-                .stroke(lineWidth: 5)
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(lineWidth: frameSize)
                 .foregroundColor(.orange)
+            Text(card.content).font(.system(size:
+                CGFloat( size.height < size.width ? size.height : size.width ) * contentSizeMultiplyer )
+            )
         }
     }
+    
+    let cornerRadius: CGFloat = 25.0
+    let contentSizeMultiplyer: CGFloat = 0.75
+    let frameSize: CGFloat = 5.0
 }
 
 
