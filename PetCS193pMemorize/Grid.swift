@@ -9,8 +9,8 @@ import SwiftUI
 
 struct Grid<Item, ItemView>: View where Item: Identifiable, ItemView: View{
     
-    var items: [Item]
-    var viewForItem: (Item) -> ItemView
+    private var items: [Item]
+    private var viewForItem: (Item) -> ItemView
     
     init(_ items : [Item], viewForItem: @escaping (Item) -> ItemView) {
         self.items = items
@@ -22,33 +22,22 @@ struct Grid<Item, ItemView>: View where Item: Identifiable, ItemView: View{
         }
     }
     
-    func body(for layout: GridLayout) -> some View{
+    private func body(for layout: GridLayout) -> some View{
         ForEach(items){ item in self.body(for: item, in: layout) }
     }
-    func body(for item: Item, in layout: GridLayout) -> some View{
-        let index = items.firstIndex(for: item)!
+    private func body(for item: Item, in layout: GridLayout) -> some View{
+        let index = items.GetIndexByID(elem: item)!
         return viewForItem(item)
                         .frame(width: layout.itemSize.width, height: layout.itemSize.height)
                         .position(layout.location(ofItemAt: index))
     }
 }
 
-extension Array where Element: Identifiable {
-    func firstIndex( for item: Element ) -> Int? {
-        for index in 0..<self.count{
-            if self[index].id == item.id {
-                return index
-            }
-        }
-        return nil
-    }
-}
-
 struct GridLayout {
-    var size : CGSize
-    var itemSize = CGSize(width: 0,height: 0)
-    var rows = 0
-    var cols = 0
+    private(set) var size : CGSize
+    private(set) var itemSize = CGSize(width: 0,height: 0)
+    private(set) var rows = 0
+    private(set) var cols = 0
 
     init( itemsCount : Int, gridSize: CGSize )
     {

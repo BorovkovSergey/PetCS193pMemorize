@@ -8,9 +8,9 @@
 import Foundation
 
 struct Memorize<ContentType> where ContentType: Equatable {
-    var cards : [Card]
+    private(set) var cards : [Card]
     
-    var chosenCardIndex: Int? {
+    private var chosenCardIndex: Int? {
         get{ cards.indices.filter{ cards[$0].isFacedUp }.only }
         set{
             for i in cards.indices {
@@ -18,6 +18,7 @@ struct Memorize<ContentType> where ContentType: Equatable {
             }
         }
     }
+    
     init(pairsOfCardsCount : Int, cardContentFactory : (Int)->ContentType) {
         cards = [Card]()
         for index in 0..<pairsOfCardsCount
