@@ -33,8 +33,10 @@ struct CardView: View {
     func body(for size: CGSize) -> some View{
         ZStack(){
             let carColor = card.isFacedUp ? Color.white : Color.orange
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(carColor)
+            if !card.isMatched {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(carColor)
+            }
             if card.isFacedUp {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(lineWidth: frameSize)

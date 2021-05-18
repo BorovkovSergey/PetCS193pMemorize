@@ -9,11 +9,17 @@ import Foundation
 
 extension Array where Element: Identifiable {
     func GetIndexByID( elem: Element ) -> Int? {
-        for i in 0..<self.count {
+        for i in self.indices {
             if self[i].id == elem.id {
                 return i
             }
         }
         return nil
+    }
+}
+
+extension Array{
+    var only: Element? {
+        count == 1 ? first : nil
     }
 }

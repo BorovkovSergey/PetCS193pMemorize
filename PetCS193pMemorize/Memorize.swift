@@ -10,6 +10,14 @@ import Foundation
 struct Memorize<ContentType> where ContentType: Equatable {
     var cards : [Card]
     
+    var chosenCardIndex: Int? {
+        get{ cards.indices.filter{ cards[$0].isFacedUp }.only }
+        set{
+            for i in cards.indices {
+                cards[i].isFacedUp = i == newValue
+            }
+        }
+    }
     init(pairsOfCardsCount : Int, cardContentFactory : (Int)->ContentType) {
         cards = [Card]()
         for index in 0..<pairsOfCardsCount
@@ -22,7 +30,15 @@ struct Memorize<ContentType> where ContentType: Equatable {
     
     mutating func Choose(card: Card){
         if let chosenIndex = cards.GetIndexByID(elem: card) {
-            cards[chosenIndex].isFacedUp = !cards[chosenIndex].isFacedUp
+            if let potentialMatchedIndex = chosenCardIndex {
+                if cards[chosenIndex].content == cards[potentialMatchedIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchedIndex].isMatched = true
+                }
+                cards[chosenIndex].isFacedUp = true
+            } else {
+                chosenCardIndex = chosenIndex
+            }
         }
     }
     
