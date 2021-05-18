@@ -14,6 +14,9 @@ struct MemorizeView: View {
         Grid(viewModel.cards){card in
             CardView(card: card)
                 .padding(7)
+                .onTapGesture {
+                    viewModel.Choose(card: card)
+                }
         }
     }
 }
@@ -29,14 +32,17 @@ struct CardView: View {
     
     func body(for size: CGSize) -> some View{
         ZStack(){
+            let carColor = card.isFacedUp ? Color.white : Color.orange
             RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(Color.white)
+                .fill(carColor)
+            if card.isFacedUp {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(lineWidth: frameSize)
                 .foregroundColor(.orange)
-            Text(card.content).font(.system(size:
-                CGFloat( size.height < size.width ? size.height : size.width ) * contentSizeMultiplyer )
-            )
+                Text(card.content).font(.system(size:
+                    CGFloat( size.height < size.width ? size.height : size.width ) * contentSizeMultiplyer )
+                )
+            }
         }
     }
     

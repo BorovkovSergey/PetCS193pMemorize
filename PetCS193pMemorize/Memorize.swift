@@ -20,6 +20,12 @@ struct Memorize<ContentType> where ContentType: Equatable {
         }
     }
     
+    mutating func Choose(card: Card){
+        if let chosenIndex = cards.GetIndexByID(elem: card) {
+            cards[chosenIndex].isFacedUp = !cards[chosenIndex].isFacedUp
+        }
+    }
+    
     struct Card: Identifiable {
         var content : ContentType
         var isFacedUp = false

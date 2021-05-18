@@ -14,13 +14,13 @@ class EmojiMemoryGame: ObservableObject {
         return Memorize<String>(pairsOfCardsCount: emojis.count){ index in emojis[index] }
     }
     
-    var model = EmojiMemoryGame.GameFactory()
+    @Published var model = EmojiMemoryGame.GameFactory()
 
     var cards: [Memorize<String>.Card] {
         model.cards
     }
     
     func Choose(card: Memorize<String>.Card){
-        print(card) // TODO: fixme
+        model.Choose(card: card)
     }
 }
