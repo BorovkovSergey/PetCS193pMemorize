@@ -11,6 +11,12 @@ struct MemorizeView: View {
     @ObservedObject var viewModel : EmojiMemoryGame
     
     var body: some View {
+        HStack{
+            Text("Points: \(viewModel.GetPoints())")
+                .frame( maxWidth: .infinity, alignment: .leading)
+            Button("New game", action: { viewModel.NewGame()})
+        }
+        .padding(.horizontal)
         Grid(viewModel.cards){card in
             CardView(card: card)
                 .padding(7)

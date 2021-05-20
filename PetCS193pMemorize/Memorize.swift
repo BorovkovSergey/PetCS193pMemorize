@@ -9,7 +9,7 @@ import Foundation
 
 struct Memorize<ContentType> where ContentType: Equatable {
     private(set) var cards : [Card]
-    
+    private(set) var points: Int = 0
     private var chosenCardIndex: Int? {
         get{ cards.indices.filter{ cards[$0].isFacedUp }.only }
         set{
@@ -38,6 +38,11 @@ struct Memorize<ContentType> where ContentType: Equatable {
                 if cards[chosenIndex].content == cards[potentialMatchedIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchedIndex].isMatched = true
+                    if cards[chosenIndex].hasEarnedBonus && cards[potentialMatchedIndex].hasEarnedBonus {
+                        points += 2
+                    } else {
+                        points += 1
+                    }
                 }
                 cards[chosenIndex].isFacedUp = true
             } else {
