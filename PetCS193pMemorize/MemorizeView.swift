@@ -12,9 +12,9 @@ struct MemorizeView: View {
     
     var body: some View {
         HStack{
-            Text("Points: \(viewModel.GetPoints())")
+            Text("Score: \(viewModel.GetScore())")
                 .frame( maxWidth: .infinity, alignment: .leading)
-            Button("New game", action: { viewModel.NewGame()})
+            Button("New game", action: { withAnimation(.easeInOut) { viewModel.NewGame()}})
         }
         .padding(.horizontal)
         Grid(viewModel.cards){card in

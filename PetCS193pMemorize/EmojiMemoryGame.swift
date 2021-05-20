@@ -18,7 +18,9 @@ class EmojiMemoryGame: ObservableObject {
 
     var cards: [Memorize<String>.Card] { model.cards }
 
-    func GetPoints() -> Int { model.points }
+    func GetScore() -> Int { model.score }
     func Choose(card: Memorize<String>.Card){ model.Choose(card: card) }
-    func NewGame() { model = EmojiMemoryGame.GameFactory() }
+    func NewGame() {
+        model = EmojiMemoryGame.GameFactory()
+    }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 struct Memorize<ContentType> where ContentType: Equatable {
     private(set) var cards : [Card]
-    private(set) var points: Int = 0
+    private(set) var score: Int = 0
     private var chosenCardIndex: Int? {
         get{ cards.indices.filter{ cards[$0].isFacedUp }.only }
         set{
@@ -27,8 +27,12 @@ struct Memorize<ContentType> where ContentType: Equatable {
             cards.append(Card(content: cardContent, id: index*2))
             cards.append(Card(content: cardContent, id: index*2+1))
         }
+        cards.shuffle()
     }
     
+    mutating func NewGame(pairsOfCardsCount : Int, cardContentFactory : (Int)->ContentType) {
+        
+    }
     mutating func Choose(card: Card){
         if card.isFacedUp {
             return
@@ -39,9 +43,9 @@ struct Memorize<ContentType> where ContentType: Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchedIndex].isMatched = true
                     if cards[chosenIndex].hasEarnedBonus && cards[potentialMatchedIndex].hasEarnedBonus {
-                        points += 2
+                        score += 2
                     } else {
-                        points += 1
+                        score += 1
                     }
                 }
                 cards[chosenIndex].isFacedUp = true
@@ -82,7 +86,7 @@ struct Memorize<ContentType> where ContentType: Equatable {
         var bonusTimeRemaning: TimeInterval {
             max(0, bonusTimeLimit - faceUpTime)
         }
-        // осталось бонусногт рвемени в процентах
+        // осталось бонусного рвемени в процентах
         var bonusRemaning: Double {
             return (bonusTimeLimit > 0 && bonusTimeRemaning > 0) ? bonusTimeRemaning/bonusTimeLimit : 0
         }
