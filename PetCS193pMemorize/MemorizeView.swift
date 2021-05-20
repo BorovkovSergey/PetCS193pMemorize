@@ -15,9 +15,12 @@ struct MemorizeView: View {
             CardView(card: card)
                 .padding(7)
                 .onTapGesture {
-                    viewModel.Choose(card: card)
+                    withAnimation(.linear(duration: 0.5)) {
+                        viewModel.Choose(card: card)
+                    }
                 }
         }
+        .foregroundColor(.orange)
     }
 }
 
@@ -30,27 +33,39 @@ struct CardView: View {
         }
     }
     
+    @State private var animatedBonusRemaningTime: Double = 0
+    private func StartBonusTimeRemaning(){
+        animatedBonusRemaningTime = card.bonusRemaning
+        withAnimation(.linear(duration: card.bonusTimeRemaning)) {
+            animatedBonusRemaningTime = 0
+        }
+    }
+    @ViewBuilder
     func body(for size: CGSize) -> some View{
-        ZStack(){
-            let carColor = card.isFacedUp ? Color.white : Color.orange
-            if !card.isMatched {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(carColor)
-            }
-            if card.isFacedUp {
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(lineWidth: frameSize)
-                .foregroundColor(.orange)
+        if card.isFacedUp || !card.isMatched
+        {
+            ZStack(){
+                if card.isConsumingBonusTime {
+                    ClockCircle(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-360*animatedBonusRemaningTime-90))
+                        .opacity(opacity)
+                        .onAppear(){
+                            self.StartBonusTimeRemaning()
+                        }
+                } else {
+                    ClockCircle(startAngle: Angle.degrees(0-90), endAngle: Angle.degrees(-360*card.bonusRemaning-90))
+                        .opacity(opacity)
+                }
                 Text(card.content).font(.system(size:
                     CGFloat( size.height < size.width ? size.height : size.width ) * contentSizeMultiplyer )
                 )
             }
+            .cardify(isFacedUp: card.isFacedUp)
+            .transition(AnyTransition.scale)
         }
     }
     
-    let cornerRadius: CGFloat = 25.0
-    let contentSizeMultiplyer: CGFloat = 0.75
-    let frameSize: CGFloat = 5.0
+    let contentSizeMultiplyer: CGFloat = 0.6
+    let opacity = 0.5
 }
 
 
